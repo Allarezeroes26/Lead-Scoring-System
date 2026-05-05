@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from model_loader import ModelService
+from schema import Customer
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -18,16 +19,16 @@ def root():
     return {"message": "ML Service is running"}
 
 @app.post("/predict")
-def predict(input_data: dict):
+def predict(input_data: Customer):
     try:
-        return model.predict(input_data)
+        return model.predict(input_data.dict())
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
     
 @app.post("/predict_batch")
-def predict_batch(inputs: list):
+def predict_batch(inputs: list[Customer]):
     try:
-        return model.predict_batch(inputs)
+        return model.predict_batch([input.dict() for input in inputs])
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
