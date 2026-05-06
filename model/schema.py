@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from enum import Enum
 
 class Job(str, Enum):
-    ADMIN = "admin."
+    ADMIN = "admin"
     TECHNICIAN = "technician"
     SERVICES = "services"
     MANAGEMENT = "management"
