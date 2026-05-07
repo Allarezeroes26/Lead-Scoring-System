@@ -139,6 +139,14 @@ export default function BatchPage() {
             alert("Error: " + err.message);
         } finally {
             setLoading(false);
+            const batchRecord = {
+                fileName: fileName,
+                date: new Date().toLocaleString(),
+                results: allResults
+            };
+
+            const existingHistory = JSON.parse(localStorage.getItem("scoring_history") || "[]");
+            localStorage.setItem("scoring_history", JSON.stringify([...existingHistory, batchRecord]));
         }
     };
 
@@ -165,7 +173,7 @@ export default function BatchPage() {
     }, [results]);
 
     return (
-        <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
+        <div className="min-h-screen p-4 md:p-8 font-sans">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 <div className="lg:col-span-4 space-y-6">
@@ -271,7 +279,7 @@ export default function BatchPage() {
                                     Lead Intelligence
                                     {results.length > 0 && <Badge variant="secondary" className="text-[10px] uppercase">{results.length} Scored</Badge>}
                                 </CardTitle>
-                                <CardDescription>Ranked by AI Propensity Score</CardDescription>
+                                <CardDescription>Ranked by Predicted Conversion Probability</CardDescription>
                             </div>
                             {results.length > 0 && (
                                 <div className="flex bg-slate-100 p-1 rounded-lg">
@@ -293,7 +301,7 @@ export default function BatchPage() {
                                     <TableHeader className="bg-slate-50/50 sticky top-0 z-10 backdrop-blur-md">
                                         <TableRow>
                                             <TableHead className="font-black text-[10px] uppercase py-4 pl-6 text-slate-500">Lead Profile</TableHead>
-                                            <TableHead className="font-black text-[10px] uppercase text-slate-500 text-center">AI Confidence</TableHead>
+                                            <TableHead className="font-black text-[10px] uppercase text-slate-500 text-center">Model Confidence</TableHead>
                                             <TableHead className="text-right font-black text-[10px] uppercase pr-6 text-slate-500">Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
@@ -355,7 +363,7 @@ export default function BatchPage() {
                                                                     <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl">
                                                                         <div className="flex items-center gap-2 mb-2">
                                                                             <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                                                                            <p className="text-xs font-black text-indigo-600 uppercase italic">AI Reasoning</p>
+                                                                            <p className="text-xs font-black text-indigo-600 uppercase italic">Model Explanation</p>
                                                                         </div>
                                                                         <p className="text-sm text-indigo-900 leading-relaxed">
                                                                             High-intent signal detected. Lead conversion probability is <strong>{(row.score * 100).toFixed(1)}%</strong>. 

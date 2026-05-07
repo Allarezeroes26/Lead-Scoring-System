@@ -85,7 +85,6 @@ const PredictPage = () => {
         }
     };
 
-    // Logic for "Why" the score happened
     const getFactors = () => {
         const factors = [];
         if (parseInt(form.duration) > 300) factors.push("Long call duration suggests high interest");
@@ -97,7 +96,7 @@ const PredictPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8">
+        <div className="w-full">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 {/* LEFT: FORM INPUTS */}
@@ -106,9 +105,9 @@ const PredictPage = () => {
                         <CardHeader className="flex flex-row items-center justify-between pb-4">
                             <div>
                                 <CardTitle className="text-xl font-bold flex items-center gap-2">
-                                    <BrainCircuit className="w-5 h-5 text-primary" /> ML Lead Analyzer
+                                    <BrainCircuit className="w-5 h-5 text-primary" /> Lead Conversion Predictor
                                 </CardTitle>
-                                <CardDescription>Input lead characteristics for propensity modeling.</CardDescription>
+                                <CardDescription>Predict the likelihood of a customer converting based on behavioral and financial data.</CardDescription>
                             </div>
                             <Button variant="ghost" size="sm" onClick={() => { setForm(initialState); setResult(null); }}>
                                 <RotateCcw className="w-4 h-4 mr-2" /> Reset
@@ -129,7 +128,7 @@ const PredictPage = () => {
                                         <div className="space-y-1">
                                             <Label className="text-xs">Job Role</Label>
                                             <select value={form.job} onChange={(e) => setForm({...form, job: e.target.value})} className="flex h-8 w-full rounded-md border border-input bg-background px-3 text-xs">
-                                                {["admin.", "blue-collar", "management", "retired", "technician", "services", "unemployed", "student", "unknown"].map(j => (
+                                                {["admin", "blue-collar", "management", "retired", "technician", "services", "unemployed", "student", "unknown", "self-employed"].map(j => (
                                                     <option key={j} value={j}>{j.replace('.', '').toUpperCase()}</option>
                                                 ))}
                                             </select>
@@ -195,7 +194,7 @@ const PredictPage = () => {
                                         <div className="space-y-1">
                                             <Label className="text-xs">Month</Label>
                                             <select value={form.month} onChange={(e) => setForm({...form, month: e.target.value})} className="flex h-8 w-full rounded-md border border-input bg-background px-2 text-xs">
-                                                {["jan","may","aug","nov"].map(m => <option key={m} value={m}>{m.toUpperCase()}</option>)}
+                                                {["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"].map(m => <option key={m} value={m}>{m.toUpperCase()}</option>)}
                                             </select>
                                         </div>
                                         <div className="space-y-1">
@@ -214,7 +213,7 @@ const PredictPage = () => {
                                 </div>
 
                                 <Button type="submit" className="w-full h-10 text-sm font-bold shadow-lg shadow-primary/20 transition-all active:scale-[0.98]" disabled={loading}>
-                                    {loading ? <><Loader2 className="animate-spin mr-2 w-4 h-4" /> Running Models...</> : "Analyze Lead Propensity"}
+                                    {loading ? <><Loader2 className="animate-spin mr-2 w-4 h-4" /> Processing Prediction...</> : "Run Prediction"}
                                 </Button>
                             </CardContent>
                         </form>
@@ -271,13 +270,13 @@ const PredictPage = () => {
                                 <div className={`h-2 w-full ${advice.bg} transition-colors duration-1000`} />
                                 <CardContent className="p-8">
                                     <div className="mb-6">
-                                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Conversion Status</p>
+                                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-1">Prediction Result</p>
                                         <h2 className={`text-6xl font-black tracking-tighter ${advice.color}`}>{result.status}</h2>
                                     </div>
                                     <div className="space-y-4">
                                         <div className="flex justify-between items-end">
                                             <div className="space-y-1">
-                                                <span className="text-xs font-bold flex items-center gap-2"><TrendingUp className="w-4 h-4 text-primary" /> Success Probability</span>
+                                                <span className="text-xs font-bold flex items-center gap-2"><TrendingUp className="w-4 h-4 text-primary" /> Conversion Probability</span>
                                                 <p className="text-[10px] text-slate-400 font-medium">
                                                     {animatedScore > 75 && "✓ High likelihood of conversion"}
                                                     {animatedScore > 40 && animatedScore <= 75 && "⚠ Moderate interest detected"}
