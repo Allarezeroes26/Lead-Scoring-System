@@ -181,7 +181,7 @@ export default function BatchPage() {
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <Database className="w-5 h-5 text-indigo-600" /> 
-                                Data Engine
+                                Batch Predictor
                             </CardTitle>
                             <Dialog>
                                 <DialogTrigger asChild>

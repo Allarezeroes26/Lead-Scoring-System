@@ -32,3 +32,27 @@ def predict_batch(inputs: list[Customer]):
         return model.predict_batch([input.dict() for input in inputs])
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@app.get("/weights")
+def get_weights():
+    try:
+        weights_list = []
+        for name, weight in zip(model.feature_names, model.w.tolist()):
+            # Replace underscores with spaces for the UI
+            display_name = name.replace("_", " ").title()
+            
+            weights_list.append({
+                "feature": display_name,
+                "weight": float(weight),
+                "type": "Categorical" if "_" in name else "Numerical"
+            })
+        
+        weights_list.sort(key=lambda x: abs(x["weight"]), reverse=True)
+        
+        return {
+            "weights": weights_list,
+            "threshold": model.threshold,
+            "bias": float(model.b)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

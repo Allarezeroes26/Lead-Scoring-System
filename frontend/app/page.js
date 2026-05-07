@@ -103,7 +103,7 @@ export default function Home() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
           <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none mb-2 px-3 py-1">
-            <BrainCircuit className="w-3 h-3 mr-2" /> Logistic Regression v1.0
+            <BrainCircuit className="w-3 h-3 mr-2" /> Prediction System (Logistic Regression) v1.0
           </Badge>
           <h1 className="text-4xl font-black tracking-tight text-slate-900">Lead Scoring Dashboard</h1>
           <p className="text-slate-500 font-medium">Monitor lead conversion predictions and model performance.</p>
@@ -175,15 +175,26 @@ export default function Home() {
                 </CardContent>
              </Card>
 
-             <Card className="border-none shadow-md bg-indigo-900 text-white p-6 relative overflow-hidden flex flex-col justify-center">
-                <Zap className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />
-                <p className="text-xs font-black text-indigo-300 uppercase mb-2">Model Overview</p>
-                <p className="text-lg font-bold leading-tight">
-                  Model Notes
-
-This project uses a custom logistic regression implementation trained on marketing campaign data. Predictions are based on customer engagement, financial indicators, and prior campaign outcomes.
+             <Card className="border-none shadow-md bg-indigo-900 text-white p-8 relative overflow-hidden flex flex-col justify-center min-h-[200px]">
+              {/* Background Decoration */}
+              <Zap className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />
+              
+              <div className="relative z-10">
+                <p className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em] mb-4">
+                  Technical Overview
                 </p>
-             </Card>
+                
+                <h3 className="text-xl font-bold mb-3 tracking-tight">
+                  Model Notes
+                </h3>
+                
+                <p className="text-sm leading-relaxed text-indigo-100/80 font-medium max-w-md">
+                  This project uses a custom logistic regression implementation trained on 
+                  marketing campaign data. Predictions are based on customer engagement, 
+                  financial indicators, and prior campaign outcomes.
+                </p>
+              </div>
+            </Card>
           </div>
         </div>
 
