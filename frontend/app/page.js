@@ -24,7 +24,6 @@ export default function Home() {
   });
 
   useEffect(() => {
-    // 1. Load Data from LocalStorage
     const singleData = JSON.parse(localStorage.getItem("leadHistory") || "[]");
     const batchHistory = JSON.parse(localStorage.getItem("scoring_history") || "[]");
     const batchData = batchHistory.flatMap(b => b.results || []);
