@@ -56,3 +56,22 @@ def get_weights():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.post("/settings/update")
+def update_settings(settings: dict):
+    try:
+        if "threshold" in settings:
+            model.threshold = float(settings["threshold"])
+
+        return {"status": "success", "new_threshold": model.threshold}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@app.post("/settings/reset")
+def reset_settings():
+    try:
+        global model
+        model = ModelService() # Re-loads .npy files from disk
+        return {"status": "success", "threshold": model.threshold}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

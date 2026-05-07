@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
     Database, TrendingUp, Target, Zap, 
-    BrainCircuit, ArrowUpRight, Clock, 
-    ChevronRight, Download, Activity 
+    BrainCircuit, ArrowUpRight, Activity,
+    ShieldCheck, Terminal, Download
 } from "lucide-react";
 
 export default function Home() {
@@ -31,29 +31,20 @@ export default function Home() {
     
     if (combined.length > 0) {
       const total = combined.length;
-      
-      // Calculate Average Propensity
       const avgRaw = (combined.reduce((acc, curr) => acc + (curr.score || 0), 0) / total);
-      
-      // Calculate Priority (Hot) Leads
       const hot = combined.filter(l => l.status?.toLowerCase() === "hot" || (l.score || 0) >= 0.7).length;
 
-      // DYNAMIC MODEL HEALTH: 
-      // Measures how far predictions are from the 0.5 (uncertainty) boundary.
-      // Health = 100% means all scores are 0 or 1. 0% means all scores are 0.5.
       const confidenceSum = combined.reduce((acc, curr) => {
         return acc + Math.abs((curr.score || 0) - 0.5) * 2;
       }, 0);
       const calculatedHealth = ((confidenceSum / total) * 100).toFixed(1);
 
-      // Score Distribution for Bar Chart
       const dist = [
-        { name: 'Low (<0.4)', count: combined.filter(l => (l.score || 0) < 0.4).length, color: '#94a3b8' },
-        { name: 'Mid (0.4-0.7)', count: combined.filter(l => (l.score || 0) >= 0.4 && (l.score || 0) < 0.7).length, color: '#6366f1' },
-        { name: 'High (>0.7)', count: combined.filter(l => (l.score || 0) >= 0.7).length, color: '#f43f5e' },
+        { name: 'LOW', count: combined.filter(l => (l.score || 0) < 0.4).length, color: '#1e293b' },
+        { name: 'MID', count: combined.filter(l => (l.score || 0) >= 0.4 && (l.score || 0) < 0.7).length, color: '#3b82f6' },
+        { name: 'HIGH', count: combined.filter(l => (l.score || 0) >= 0.7).length, color: '#f43f5e' },
       ];
 
-      // Chart Data (Last 15 scores)
       const chart = combined.slice(-15).map((item, i) => ({
         name: i + 1,
         score: Math.round((item.score || 0) * 100)
@@ -75,160 +66,145 @@ export default function Home() {
     const singleData = JSON.parse(localStorage.getItem("leadHistory") || "[]");
     const batchHistory = JSON.parse(localStorage.getItem("scoring_history") || "[]");
     const combined = [...singleData, ...batchHistory.flatMap(b => b.results || [])];
+    if (combined.length === 0) return;
 
-    if (combined.length === 0) {
-        alert("No lead data found to export.");
-        return;
-    }
-
-    const rows = combined.map(lead => 
-        Object.values(lead).map(value => `"${value}"`).join(",")
-    );
+    const headers = Object.keys(combined[0]).join(",");
+    const rows = combined.map(lead => Object.values(lead).map(value => `"${value}"`).join(","));
     const csvContent = [headers, ...rows].join("\n");
-
-    // Trigger Download
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `model_history_${new Date().toISOString().split('T')[0]}.csv`);
-    document.body.appendChild(link);
+    link.href = url;
+    link.download = `LOGIT_EXPORT_${new Date().getTime()}.csv`;
     link.click();
-    document.body.removeChild(link);
   };
 
   return (
-    <div className="p-8 space-y-8 bg-slate-50/50 min-h-screen font-sans">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <div>
-          <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none mb-2 px-3 py-1">
-            <BrainCircuit className="w-3 h-3 mr-2" /> Prediction System (Logistic Regression) v1.0
-          </Badge>
-          <h1 className="text-4xl font-black tracking-tight text-slate-900">Lead Scoring Dashboard</h1>
-          <p className="text-slate-500 font-medium">Monitor lead conversion predictions and model performance.</p>
+    <div className="p-6 lg:p-10 space-y-10 bg-transparent min-h-screen text-slate-200">
+      
+      {/* HEADER: ENGINE STATUS */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-slate-800/60 pb-10">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_#3b82f6]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Core Dashboard // Scorer_V1</span>
+          </div>
+          <h1 className="text-5xl font-black tracking-tighter text-white">Lead Intelligence</h1>
+          <p className="text-slate-500 font-mono text-xs uppercase tracking-widest">Aggregated Predictive Telemetry</p>
         </div>
-        <div className="flex gap-3">
-          <Link href="/scorer"><Button variant="outline" className="bg-white border-slate-200">Single Entry</Button></Link>
-          <Link href="/batch_scorer"><Button className="bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-100">Batch Scorer</Button></Link>
+        <div className="flex items-center gap-4">
+          <Link href="/scorer">
+            <Button variant="outline" className="h-12 border-slate-800 bg-slate-900/30 backdrop-blur-sm hover:bg-slate-800 text-slate-300 rounded-xl px-6 font-bold uppercase text-[10px] tracking-widest">
+              Manual Entry
+            </Button>
+          </Link>
+          <Link href="/batch_scorer">
+            <Button className="h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-xl px-6 font-black uppercase text-[10px] tracking-widest shadow-lg shadow-blue-900/20">
+              Execute Batch
+            </Button>
+          </Link>
         </div>
       </div>
 
-      {/* Primary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <StatCard title="Total Analyzed" value={metrics.total} icon={<Database className="text-indigo-600"/>} />
-        <StatCard title="Average Conversion Score" value={`${metrics.avgScore}%`} icon={<TrendingUp className="text-emerald-500"/>} />
-        <StatCard title="Priority Leads" value={metrics.hotLeads} icon={<Target className="text-amber-500"/>} />
-        <StatCard 
-            title="Prediction Confidence" 
-            value={`${metrics.modelHealth}%`} 
-            icon={<Zap className={parseFloat(metrics.modelHealth) < 50 ? "text-amber-500" : "text-indigo-400"}/>} 
-            trend={parseFloat(metrics.modelHealth) > 70 ? "Stable" : "Variable"}
-            description="Average confidence across recent predictions." 
-        />
+      {/* METRIC GRIDS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard title="Vectors Analyzed" value={metrics.total} icon={<Database className="w-4 h-4" />} />
+        <StatCard title="Mean Propensity" value={`${metrics.avgScore}%`} icon={<TrendingUp className="w-4 h-4" />} />
+        <StatCard title="Priority Filter" value={metrics.hotLeads} icon={<Target className="w-4 h-4" />} color="text-rose-500" />
+        <StatCard title="Inference Confidence" value={`${metrics.modelHealth}%`} icon={<ShieldCheck className="w-4 h-4" />} color="text-cyan-400" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Main Content Area */}
         <div className="lg:col-span-8 space-y-8">
-          <Card className="border-none shadow-md bg-white">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <div>
-                <CardTitle className="text-xs font-black uppercase tracking-widest text-slate-400">Probability Curve</CardTitle>
-                <CardDescription>Visualizing output variance for recent entries</CardDescription>
+          <Card className="border-slate-800/60 bg-slate-900/20 backdrop-blur-md overflow-hidden shadow-2xl">
+            <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/40 py-4">
+              <div className="flex items-center gap-3">
+                 <Activity className="w-4 h-4 text-blue-500" />
+                 <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Inference Variance</CardTitle>
               </div>
-              <ArrowUpRight className="text-slate-300 w-5 h-5" />
+              <Badge variant="outline" className="font-mono text-[10px] border-slate-700 text-slate-500">REALTIME_FEED</Badge>
             </CardHeader>
-            <CardContent className="h-[300px] pt-4">
+            <CardContent className="h-[350px] pt-8">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={metrics.chartData}>
                   <defs>
-                    <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    <linearGradient id="curveGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" strokeOpacity={0.3} />
                   <XAxis dataKey="name" hide />
                   <YAxis hide domain={[0, 100]} />
-                  <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                  <Area type="monotone" dataKey="score" stroke="#6366f1" fillOpacity={1} fill="url(#colorScore)" strokeWidth={3} />
+                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', fontSize: '10px' }} />
+                  <Area type="stepAfter" dataKey="score" stroke="#3b82f6" fillOpacity={1} fill="url(#curveGrad)" strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             <Card className="border-none shadow-md">
-                <CardHeader><CardTitle className="text-xs font-black uppercase text-slate-400">Score Segmentation</CardTitle></CardHeader>
-                <CardContent className="h-[150px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={metrics.distribution}>
-                            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                                {metrics.distribution.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                            </Bar>
-                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fontWeight: 'bold'}} />
-                        </BarChart>
-                    </ResponsiveContainer>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             <Card className="border-slate-800/60 bg-slate-900/20 backdrop-blur-sm">
+                <CardHeader className="py-4 border-b border-slate-800/40">
+                    <CardTitle className="text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2">
+                        <Terminal className="w-3 h-3" /> Distribution Matrix
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="h-[200px] pt-6">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={metrics.distribution}>
+                      <Bar dataKey="count" radius={[2, 2, 0, 0]} barSize={40}>
+                        {metrics.distribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} opacity={0.8} />
+                        ))}
+                      </Bar>
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 10, fontWeight: 'bold', fill: '#475569', fontFamily: 'monospace'}} />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </CardContent>
              </Card>
 
-             <Card className="border-none shadow-md bg-indigo-900 text-white p-8 relative overflow-hidden flex flex-col justify-center min-h-[200px]">
-              {/* Background Decoration */}
-              <Zap className="absolute -right-4 -bottom-4 w-32 h-32 text-white/10 rotate-12" />
-              
-              <div className="relative z-10">
-                <p className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em] mb-4">
-                  Technical Overview
-                </p>
-                
-                <h3 className="text-xl font-bold mb-3 tracking-tight">
-                  Model Notes
-                </h3>
-                
-                <p className="text-sm leading-relaxed text-indigo-100/80 font-medium max-w-md">
-                  This project uses a custom logistic regression implementation trained on 
-                  marketing campaign data. Predictions are based on customer engagement, 
-                  financial indicators, and prior campaign outcomes.
-                </p>
-              </div>
+             <Card className="border-none bg-blue-600/90 shadow-[0_0_40px_-10px_rgba(37,99,235,0.3)] text-white p-8 relative overflow-hidden flex flex-col justify-center">
+                <Zap className="absolute top-0 right-0 p-4 w-24 h-24 text-white/10 -mr-6 -mt-6" />
+                <div className="relative z-10 space-y-4">
+                  <p className="text-[10px] font-black text-blue-100 uppercase tracking-[0.3em]">Module Notes</p>
+                  <h3 className="text-2xl font-black tracking-tighter">Logistic Regression</h3>
+                  <p className="text-sm leading-relaxed text-blue-500 font-bold bg-white/95 p-3 rounded-lg">
+                    Optimized for High-Value conversion detection based on engagement vectors.
+                  </p>
+                </div>
             </Card>
           </div>
         </div>
 
-        {/* Sidebar */}
         <div className="lg:col-span-4">
-          <Card className="border-none shadow-md h-full bg-white">
-            <CardHeader className="border-b border-slate-50 flex flex-row items-center justify-between">
-                <CardTitle className="text-sm font-black uppercase text-slate-400">Recent Predictions</CardTitle>
-                <Activity className="w-4 h-4 text-indigo-500" />
+          <Card className="border-slate-800/60 bg-slate-900/20 backdrop-blur-md h-full flex flex-col shadow-2xl">
+            <CardHeader className="border-b border-slate-800/40 py-5">
+                <div className="flex items-center justify-between">
+                    <CardTitle className="text-[10px] font-black uppercase tracking-widest text-slate-400">Recent Stream</CardTitle>
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-ping" />
+                </div>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="divide-y divide-slate-50">
+            <CardContent className="p-0 flex-grow">
+              <div className="divide-y divide-slate-800/40">
                 {metrics.recentLeads.map((lead, i) => (
-                  <div key={i} className="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                    <div>
-                        <p className="text-sm font-black text-slate-700 capitalize">{lead.job || "Lead Record"}</p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
-                            {Math.round((lead.score || 0) * 100)}% Propensity
-                        </p>
+                  <div key={i} className="p-5 flex items-center justify-between hover:bg-white/5 transition-all group">
+                    <div className="space-y-1">
+                        <p className="text-xs font-black text-slate-200 uppercase tracking-tighter group-hover:text-blue-400">{lead.job || "Lead_Object"}</p>
+                        <p className="text-[10px] font-mono text-slate-500">SCORE: {(lead.score || 0).toFixed(4)}</p>
                     </div>
-                    <div className={`w-2 h-2 rounded-full ${lead.score > 0.7 ? 'bg-rose-500 animate-pulse' : 'bg-slate-200'}`} />
+                    <Badge className={`rounded-md font-mono text-[10px] ${lead.score > 0.7 ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-slate-800/50 text-slate-400 border-slate-700'}`} variant="outline">
+                        {Math.round((lead.score || 0) * 100)}%
+                    </Badge>
                   </div>
                 ))}
-                {metrics.recentLeads.length === 0 && (
-                    <p className="p-8 text-center text-slate-400 text-xs italic">Waiting for model input...</p>
-                )}
-              </div>
-              <div className="p-4 bg-slate-50/50">
-                <Button onClick={downloadFullHistory} variant="ghost" className="w-full text-xs font-black text-slate-500 hover:text-indigo-600 group">
-                    <Download className="w-3 h-3 mr-2 group-hover:-translate-y-0.5 transition-transform" /> 
-                    Download CSV Archive
-                </Button>
               </div>
             </CardContent>
+            <div className="p-4 border-t border-slate-800/40">
+                <Button onClick={downloadFullHistory} variant="ghost" className="w-full h-12 text-[10px] font-black text-slate-500 hover:text-white uppercase tracking-widest gap-2">
+                  <Download className="w-3 h-3" /> Export Telemetry
+                </Button>
+            </div>
           </Card>
         </div>
       </div>
@@ -236,19 +212,22 @@ export default function Home() {
   );
 }
 
-function StatCard({ title, value, icon, trend, description }) {
+function StatCard({ title, value, icon, color = "text-blue-500" }) {
   return (
-    <Card className="border-none shadow-sm bg-white hover:shadow-md transition-all">
-      <CardContent className="p-6 flex justify-between items-center">
-        <div>
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{title}</p>
-          <div className="flex items-baseline gap-2">
-            <p className="text-3xl font-black text-slate-900 tracking-tighter">{value}</p>
-            {trend && <span className="text-[10px] font-black text-emerald-600">{trend}</span>}
-          </div>
-          {description && <p className="text-[9px] text-slate-400 mt-1 font-medium">{description}</p>}
+    <Card className="border-slate-800/60 bg-slate-900/10 backdrop-blur-sm hover:bg-slate-900/30 transition-all group shadow-lg">
+      <CardContent className="p-6 flex flex-col gap-4">
+        <div className="flex justify-between items-start">
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{title}</span>
+            <div className={`p-2 bg-slate-900/50 rounded-lg border border-slate-800/50 group-hover:border-blue-500/50 transition-colors ${color}`}>
+                {icon}
+            </div>
         </div>
-        <div className="p-3 bg-slate-50 rounded-xl">{icon}</div>
+        <div>
+            <p className="text-4xl font-black text-white tracking-tighter font-mono">{value}</p>
+            <div className="w-full h-1 bg-slate-800/50 rounded-full mt-3 overflow-hidden">
+                <div className={`h-full bg-current opacity-30 ${color}`} style={{width: '65%'}} />
+            </div>
+        </div>
       </CardContent>
     </Card>
   );

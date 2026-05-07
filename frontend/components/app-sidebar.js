@@ -1,15 +1,16 @@
 "use client"
 
 import * as React from "react"
+import { usePathname } from "next/navigation"
 import { 
-  LayoutDashboard, 
   Settings, 
   Package, 
   Home, 
   Info, 
   Activity,
   Terminal,
-  UserCircle
+  UserCircle,
+  Weight
 } from "lucide-react"
 
 import {
@@ -29,62 +30,80 @@ import {
 const data = {
   navMain: [
     { title: "Home", url: "/", icon: Home },
-    { title: "Lead Predictor", url: "/scorer", icon: Activity }, // Swapped to Activity for statistical feel
+    { title: "Lead Predictor", url: "/scorer", icon: Activity },
     { title: "Batch Predictor", url: "/batch_scorer", icon: Package },
-    { title: "Model Details", url: "/about", icon: Info }, // Swapped to Info for the About page
+    { title: "Model Details", url: "/about", icon: Info },
+    { title: "Weights", url: "/weight", icon: Weight },
     { title: "Settings", url: "/settings", icon: Settings },
   ],
 }
 
 export function AppSidebar() {
+  const pathname = usePathname()
+
   return (
-    <Sidebar collapsible="icon" className="border-r border-slate-200">
-      <SidebarHeader className="py-6 px-4">
-        <div className="flex items-center gap-3">
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-200">
+    <Sidebar collapsible="icon" className="border-r border-slate-800/50 bg-[#020617]">
+      <SidebarHeader className="h-[72px] justify-center px-4 group-data-[collapsible=icon]:p-0">
+        <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
+          <div className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]">
             <Terminal className="size-5" />
           </div>
           <div className="flex flex-col gap-0.5 leading-none group-data-[collapsible=icon]:hidden">
-            <span className="font-black tracking-tight text-slate-900 uppercase text-xs">PredictionSystem</span>
-            <span className="text-[10px] text-slate-500 font-medium italic">v1.0.4-raw</span>
+            <span className="font-black tracking-tight text-slate-100 uppercase text-[11px]">Customer_Predictor</span>
+            <span className="text-[10px] text-blue-500/80 font-mono font-bold tracking-tighter">v1.0.0_STABLE</span>
           </div>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
-            Inference Tools
+          <SidebarGroupLabel className="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500/70 group-data-[collapsible=icon]:hidden">
+            Inference Control
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="px-2">
-              {data.navMain.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton 
-                    asChild 
-                    tooltip={item.title}
-                    className="hover:bg-slate-100 transition-all duration-200"
-                  >
-                    <a href={item.url} className="flex items-center gap-3 py-5">
-                      <item.icon className="size-4.5 text-slate-500 group-data-[state=active]:text-blue-600" />
-                      <span className="font-semibold text-slate-600 group-data-[state=active]:text-slate-900">
-                        {item.title}
-                      </span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            <SidebarMenu className="px-2 gap-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
+              {data.navMain.map((item) => {
+                const isActive = pathname === item.url
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton 
+                      asChild 
+                      tooltip={item.title}
+                      isActive={isActive}
+                      className={`
+                        transition-all duration-200 rounded-lg 
+                        h-11 w-full
+                        group-data-[collapsible=icon]:w-10
+                        group-data-[collapsible=icon]:justify-center
+                        ${isActive 
+                          ? "bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[inset_0_0_10px_rgba(59,130,246,0.1)]" 
+                          : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"}
+                      `}
+                    >
+                      <a href={item.url} className="flex items-center gap-3 px-3 group-data-[collapsible=icon]:px-0">
+                        <item.icon className={`size-5 shrink-0 transition-colors ${isActive ? "text-blue-400" : "text-slate-500"}`} />
+                        <span className={`font-bold text-sm tracking-tight group-data-[collapsible=icon]:hidden ${isActive ? "text-slate-100" : ""}`}>
+                          {item.title}
+                        </span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-slate-100 group-data-[collapsible=icon]:p-2">
-        <div className="flex items-center gap-3 px-2 py-1 bg-slate-50 rounded-xl border border-slate-200">
-          <UserCircle className="size-5 text-slate-400 shrink-0" />
+      <SidebarFooter className="p-4 border-t border-slate-800/50 group-data-[collapsible=icon]:p-2">
+        <div className="flex items-center gap-3 px-3 py-2 bg-slate-900/40 rounded-xl border border-slate-800/60 backdrop-blur-sm group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:border-none group-data-[collapsible=icon]:justify-center">
+          <div className="relative shrink-0">
+            <UserCircle className="size-6 text-slate-400" />
+            <div className="absolute bottom-0 right-0 size-2 bg-emerald-500 rounded-full border-2 border-[#020617]" />
+          </div>
           <div className="flex flex-col min-w-0 group-data-[collapsible=icon]:hidden">
-            <span className="text-[11px] font-bold text-slate-900 truncate">Erwin Bacani</span>
-            <span className="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">Developer</span>
+            <span className="text-xs font-bold text-slate-200 truncate">Erwin Bacani</span>
+            <span className="text-[9px] text-blue-500 font-mono font-bold uppercase tracking-tighter">System_Admin</span>
           </div>
         </div>
       </SidebarFooter>
