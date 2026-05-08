@@ -3,9 +3,8 @@ import { NextResponse } from 'next/server';
 export async function POST(request) {
     try {
         const body = await request.json();
-        const FASTAPI_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
+        const FASTAPI_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
-        // 1. DATA TRANSFORMATION (Crucial for Pydantic/FastAPI)
         const formattedData = {
             ...body,
             age: parseInt(body.age),
@@ -15,7 +14,6 @@ export async function POST(request) {
             campaign: parseInt(body.campaign),
             pdays: parseInt(body.pdays) || -1,
             previous: parseInt(body.previous) || 0,
-            // Convert "yes"/"no" strings to Booleans
             default: body.default === "yes",
             housing: body.housing === "yes",
             loan: body.loan === "yes",
