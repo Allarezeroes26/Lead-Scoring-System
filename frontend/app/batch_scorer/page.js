@@ -4,8 +4,8 @@ import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
     Dialog,
     DialogContent,
@@ -15,16 +15,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { 
-    Loader2, 
-    Upload, 
-    Database, 
-    Download, 
-    Eye,
-    BarChart3,
-    CheckCircle2,
-    TrendingUp,
-    Info,
-    Layers
+    Loader2, Upload, Database, Download, Eye,
+    BarChart3, CheckCircle2, TrendingUp, Info, Layers, Activity
 } from "lucide-react";
 
 export default function BatchPage() {
@@ -35,6 +27,8 @@ export default function BatchPage() {
     const [fileName, setFileName] = useState("");
     const [delimiter, setDelimiter] = useState(",");
     const [filter, setFilter] = useState("all");
+
+    const tabClass = (active) => `flex-1 py-2 text-[10px] font-black rounded-md transition-all border ${active ? "bg-primary text-primary-foreground border-primary shadow-lg" : "bg-muted/30 text-muted-foreground border-transparent hover:bg-muted/50"}`;
 
     const downloadTemplate = () => {
         const headers = "age,job,marital,education,default,balance,housing,loan,contact,day,month,duration,campaign,pdays,previous,poutcome";
@@ -145,8 +139,8 @@ export default function BatchPage() {
 
     const processedResults = useMemo(() => {
         let list = [...results].sort((a, b) => b.score - a.score);
-        if (filter === "hot") return list.filter(r => r.status === "Hot");
-        if (filter === "warm") return list.filter(r => r.status === "Warm");
+        if (filter === "hot") return list.filter(r => r.status?.toLowerCase() === "hot");
+        if (filter === "warm") return list.filter(r => r.status?.toLowerCase() === "warm");
         return list;
     }, [results, filter]);
 
@@ -154,8 +148,8 @@ export default function BatchPage() {
         if (results.length === 0) return null;
         return {
             total: results.length,
-            hot: results.filter(r => r.status === "Hot").length,
-            warm: results.filter(r => r.status === "Warm").length,
+            hot: results.filter(r => r.status?.toLowerCase() === "hot").length,
+            warm: results.filter(r => r.status?.toLowerCase() === "warm").length,
             avgProb: results.reduce((acc, curr) => acc + curr.score, 0) / results.length,
             distribution: {
                 low: results.filter(r => r.score < 0.4).length,
@@ -166,252 +160,268 @@ export default function BatchPage() {
     }, [results]);
 
     return (
-        <div className="min-h-screen p-4 md:p-8 font-sans bg-transparent text-slate-200">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="min-h-screen bg-background text-foreground font-mono p-4 md:p-10 transition-colors">
+            <div className="max-w-[1600px] mx-auto space-y-10">
                 
-                {/* Control Panel */}
-                <div className="lg:col-span-4 space-y-6">
-                    <Card className="border-slate-800/60 bg-slate-900/20 backdrop-blur-md shadow-2xl">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
-                            <div className="space-y-1">
-                                <CardTitle className="text-xl font-bold tracking-tight flex items-center gap-2">
-                                    <Layers className="w-5 h-5 text-blue-500" /> 
-                                    Batch Engine
-                                </CardTitle>
-                                <CardDescription className="text-slate-500 text-xs">High-volume propensity scoring</CardDescription>
-                            </div>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-white hover:bg-slate-800/50"><Info className="w-4 h-4" /></Button>
-                                </DialogTrigger>
-                                <DialogContent className="bg-slate-900 border-slate-800 text-slate-300">
-                                    <DialogHeader><DialogTitle className="text-white">Input Configuration</DialogTitle></DialogHeader>
-                                    <div className="text-sm space-y-4">
-                                        <p>The engine expects 16 features including <code className="text-blue-400">age</code>, <code className="text-blue-400">balance</code>, and <code className="text-blue-400">duration</code>.</p>
-                                        <Button onClick={downloadTemplate} className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700" variant="outline">
-                                            <Download className="w-4 h-4 mr-2" /> Download Template
+                <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2 text-primary">
+                            <Layers className="w-5 h-5" />
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Batch Processing Unit</span>
+                        </div>
+                        <h1 className="text-5xl font-black tracking-tighter text-foreground">Intelligence Batch</h1>
+                        <p className="text-muted-foreground text-sm max-w-2xl leading-relaxed font-medium">
+                            High-volume propellant scoring. Upload CSV datasets for multi-threaded neural inference.
+                        </p>
+                    </div>
+                </header>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    {/* CONTROL PANEL */}
+                    <div className="lg:col-span-4 space-y-8">
+                        <Card className="border-border bg-card shadow-xl overflow-hidden">
+                            <div className="h-1 w-full bg-gradient-to-r from-primary to-transparent opacity-80" />
+                            <CardHeader className="pb-4">
+                                <div className="flex items-center justify-between">
+                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Engine Configuration</CardTitle>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary"><Info className="w-4 h-4" /></Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="bg-card border-border font-mono">
+                                            <DialogHeader>
+                                                <DialogTitle className="text-foreground uppercase font-black">Data Requirements</DialogTitle>
+                                                <DialogDescription className="text-muted-foreground">The engine expects standard lead features (Age, Balance, Duration, etc.)</DialogDescription>
+                                            </DialogHeader>
+                                            <div className="space-y-4 py-4">
+                                                <Button onClick={downloadTemplate} className="w-full font-bold h-12" variant="outline">
+                                                    <Download className="w-4 h-4 mr-2" /> Download Template
+                                                </Button>
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="space-y-8">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Delimiter Protocol</label>
+                                    <div className="flex gap-2 p-1 bg-muted/30 rounded-lg border border-border">
+                                        {[',', ';', '|'].map((d) => (
+                                            <button 
+                                                key={d} 
+                                                className={tabClass(delimiter === d)}
+                                                onClick={() => setDelimiter(d)}
+                                            >
+                                                {d === "," ? "COMMA" : d === ";" ? "SEMI" : "PIPE"}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="relative border-2 border-dashed border-border rounded-2xl p-10 text-center hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer group">
+                                    <input type="file" accept=".csv" onChange={handleFileUpload} className="absolute inset-0 opacity-0 z-10 cursor-pointer" />
+                                    <Upload className="w-12 h-12 mx-auto text-muted-foreground group-hover:text-primary mb-4 transition-transform group-hover:-translate-y-1" />
+                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter">{fileName || "Inject Dataset (.csv)"}</p>
+                                </div>
+
+                                {/* RESTORED CSV PREVIEW */}
+                                {rawData.length > 0 && results.length === 0 && (
+                                    <div className="p-4 bg-muted/30 rounded-2xl border-2 border-border animate-in fade-in slide-in-from-bottom-2">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                                            <p className="text-[10px] font-black text-primary uppercase tracking-widest">Validation Preview</p>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {rawData.slice(0, 3).map((row, i) => (
+                                                <div key={i} className="text-[11px] font-mono text-muted-foreground p-2 rounded bg-background/50 border border-border/50 flex justify-between items-center">
+                                                    <span className="uppercase font-bold">{row.job}</span>
+                                                    <div className="flex gap-3">
+                                                        <span className="text-primary/70">{row.age}Y</span>
+                                                        <span className="text-emerald-600 font-black">${row.balance.toLocaleString()}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {rawData.length > 0 && (
+                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                                        <Separator className="bg-border" />
+                                        <div className="space-y-4">
+                                            <div className="flex justify-between items-end">
+                                                <span className="text-[10px] font-black text-primary uppercase">Neural Progress</span>
+                                                <span className="text-3xl font-black text-foreground">{progress}%</span>
+                                            </div>
+                                            <div className="h-3 w-full bg-muted rounded-full overflow-hidden border border-border p-0.5">
+                                                <div 
+                                                    className="h-full bg-primary rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(var(--primary),0.3)]" 
+                                                    style={{ width: `${progress}%` }} 
+                                                />
+                                            </div>
+                                        </div>
+                                        <Button 
+                                            onClick={processBatch} 
+                                            className="w-full h-16 font-black bg-primary text-primary-foreground hover:opacity-90 rounded-2xl shadow-xl text-lg" 
+                                            disabled={loading}
+                                        >
+                                            {loading ? <><Loader2 className="animate-spin mr-3 w-6 h-6" /> PROCESSING</> : "EXECUTE BATCH"}
                                         </Button>
                                     </div>
-                                </DialogContent>
-                            </Dialog>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Format Settings</label>
-                                <div className="flex gap-2 p-1 bg-slate-950/30 rounded-lg border border-slate-800">
-                                    {[',', ';', '|'].map((d) => (
-                                        <button 
-                                            key={d} 
-                                            className={`flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all ${delimiter === d ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20" : "text-slate-500 hover:text-slate-300"}`}
-                                            onClick={() => setDelimiter(d)}
-                                        >
-                                            {d === "," ? "COMMA" : d === ";" ? "SEMI" : "PIPE"}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="relative border border-dashed border-slate-700/50 rounded-xl p-8 text-center hover:border-blue-500/50 hover:bg-blue-500/5 transition-all cursor-pointer group">
-                                <input type="file" accept=".csv" onChange={handleFileUpload} className="absolute inset-0 opacity-0 z-10 cursor-pointer" />
-                                <Upload className="w-10 h-10 mx-auto text-slate-600 group-hover:text-blue-400 mb-3 transition-transform group-hover:-translate-y-1" />
-                                <p className="text-xs font-medium text-slate-400">{fileName || "Select Lead Data (.csv)"}</p>
-                            </div>
-
-                            {rawData.length > 0 && results.length === 0 && (
-                                <div className="p-4 bg-slate-950/20 rounded-xl border border-slate-800/40 animate-in fade-in slide-in-from-bottom-2">
-                                    <p className="text-[10px] font-bold text-slate-500 uppercase mb-3 tracking-tighter">Validation Preview</p>
-                                    {rawData.slice(0, 2).map((row, i) => (
-                                        <div key={i} className="text-[11px] text-slate-400 truncate border-b border-slate-800 last:border-0 py-2 font-mono flex justify-between">
-                                            <span className="capitalize">{row.job}</span>
-                                            {/* Removed Euro Sign */}
-                                            <span className="text-blue-500">{row.balance.toLocaleString()}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            {rawData.length > 0 && (
-                                <div className="space-y-4 pt-2">
-                                    <div className="flex justify-between items-end">
-                                        <span className="text-[10px] font-bold text-blue-500 uppercase">Analysis Progress</span>
-                                        <span className="text-xl font-black text-white">{progress}%</span>
-                                    </div>
-                                    <div className="h-1.5 w-full bg-slate-950/40 rounded-full overflow-hidden border border-slate-800">
-                                        <div 
-                                            className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 transition-all duration-500" 
-                                            style={{ width: `${progress}%` }} 
-                                        />
-                                    </div>
-                                    <Button 
-                                        onClick={processBatch} 
-                                        className="w-full py-6 font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-900/20 rounded-xl border-t border-blue-400/20" 
-                                        disabled={loading}
-                                    >
-                                        {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : "Run Intelligence Batch"}
-                                    </Button>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-
-                    {stats && (
-                        <Card className="bg-slate-900/10 border-slate-800/60 shadow-xl overflow-hidden relative group backdrop-blur-sm">
-                            <CardContent className="pt-8 relative z-10">
-                                <BarChart3 className="absolute -right-4 -top-4 w-24 h-24 text-blue-500/5 rotate-12" />
-                                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-[0.2em] mb-6">Cohort Distribution</p>
-                                <div className="grid grid-cols-3 gap-3">
-                                    <div className="bg-slate-950/20 p-3 rounded-xl border border-slate-800">
-                                        <p className="text-[9px] text-rose-500 font-bold mb-1 uppercase">High</p>
-                                        <p className="text-2xl font-black text-white">{stats.distribution.high}</p>
-                                    </div>
-                                    <div className="bg-slate-950/20 p-3 rounded-xl border border-slate-800">
-                                        <p className="text-[9px] text-amber-500 font-bold mb-1 uppercase">Mid</p>
-                                        <p className="text-2xl font-black text-white">{stats.distribution.mid}</p>
-                                    </div>
-                                    <div className="bg-slate-950/20 p-3 rounded-xl border border-slate-800">
-                                        <p className="text-[9px] text-blue-500 font-bold mb-1 uppercase">Low</p>
-                                        <p className="text-2xl font-black text-white">{stats.distribution.low}</p>
-                                    </div>
-                                </div>
-                                <div className="mt-8 pt-6 border-t border-slate-800/50 flex justify-between items-center">
-                                    <div>
-                                        <p className="text-[10px] text-slate-500 font-bold uppercase mb-1">Portfolio Strength</p>
-                                        <p className="text-3xl font-black text-white italic">{(stats.avgProb * 100).toFixed(1)}%</p>
-                                    </div>
-                                    <div className="p-3 bg-blue-500/10 rounded-full border border-blue-500/20">
-                                        <TrendingUp className="text-blue-500 w-6 h-6" />
-                                    </div>
-                                </div>
+                                )}
                             </CardContent>
                         </Card>
-                    )}
-                </div>
 
-                {/* Main Results Table */}
-                <div className="lg:col-span-8">
-                    <Card className="h-full border-slate-800/60 shadow-2xl overflow-hidden bg-slate-900/10 backdrop-blur-lg">
-                        <CardHeader className="border-b border-slate-800/60 bg-slate-900/10 flex flex-col sm:flex-row items-center justify-between py-6 gap-4">
-                            <div className="space-y-1">
-                                <CardTitle className="text-2xl font-black tracking-tight text-white flex items-center gap-3">
-                                    Intelligence Queue
-                                    {results.length > 0 && <Badge className="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] px-2 py-0">{results.length}</Badge>}
-                                </CardTitle>
-                                <CardDescription className="text-slate-500">ML-ranked lead prioritization</CardDescription>
-                            </div>
-                            {results.length > 0 && (
-                                <div className="flex bg-slate-950/30 p-1 rounded-xl border border-slate-800">
-                                    {['all', 'hot', 'warm'].map((f) => (
-                                        <button 
-                                            key={f} 
-                                            onClick={() => setFilter(f)}
-                                            className={`px-4 py-1.5 text-[10px] font-bold uppercase rounded-lg transition-all ${filter === f ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-600 hover:text-slate-400'}`}
-                                        >
-                                            {f}
-                                        </button>
-                                    ))}
+                        {stats && (
+                            <Card className="border-border bg-card shadow-xl overflow-hidden relative group">
+                                <div className="h-1 w-full bg-gradient-to-r from-emerald-500 to-transparent" />
+                                <CardContent className="pt-8">
+                                    <p className="text-[10px] text-muted-foreground uppercase font-black tracking-[0.2em] mb-6">Distribution Matrix</p>
+                                    <div className="grid grid-cols-3 gap-3">
+                                        <div className="bg-muted/30 p-4 rounded-xl border border-border">
+                                            <p className="text-[9px] text-emerald-500 font-black mb-1 uppercase tracking-tighter">High</p>
+                                            <p className="text-2xl font-black text-foreground">{stats.distribution.high}</p>
+                                        </div>
+                                        <div className="bg-muted/30 p-4 rounded-xl border border-border">
+                                            <p className="text-[9px] text-amber-500 font-black mb-1 uppercase tracking-tighter">Mid</p>
+                                            <p className="text-2xl font-black text-foreground">{stats.distribution.mid}</p>
+                                        </div>
+                                        <div className="bg-muted/30 p-4 rounded-xl border border-border">
+                                            <p className="text-[9px] text-primary font-black mb-1 uppercase tracking-tighter">Low</p>
+                                            <p className="text-2xl font-black text-foreground">{stats.distribution.low}</p>
+                                        </div>
+                                    </div>
+                                    <div className="mt-8 pt-6 border-t border-border flex justify-between items-center">
+                                        <div>
+                                            <p className="text-[10px] text-muted-foreground font-black uppercase mb-1">Avg. Probability</p>
+                                            <p className="text-4xl font-black text-foreground italic">{(stats.avgProb * 100).toFixed(1)}%</p>
+                                        </div>
+                                        <div className="h-12 w-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+                                            <TrendingUp className="text-primary w-6 h-6" />
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
+                    </div>
+
+                    <div className="lg:col-span-8">
+                        <Card className="h-full border-border bg-card shadow-2xl overflow-hidden flex flex-col">
+                            <CardHeader className="border-b border-border bg-muted/10 flex flex-col sm:flex-row items-center justify-between py-6 gap-4">
+                                <div className="space-y-1">
+                                    <CardTitle className="text-2xl font-black tracking-tighter flex items-center gap-3">
+                                        Intelligence Queue
+                                        {results.length > 0 && <Badge variant="outline" className="font-mono text-[10px] border-primary text-primary">{results.length}</Badge>}
+                                    </CardTitle>
+                                    <CardDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground">Real-time ranked lead prioritization</CardDescription>
                                 </div>
-                            )}
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="max-h-[700px] overflow-auto scrollbar-hide">
-                                <Table>
-                                    <TableHeader className="bg-[#020617]/80 sticky top-0 z-10 backdrop-blur-xl border-b border-slate-800">
-                                        <TableRow className="border-none hover:bg-transparent">
-                                            <TableHead className="font-bold text-[10px] uppercase py-5 pl-8 text-slate-500 tracking-widest">Subject Profile</TableHead>
-                                            <TableHead className="font-bold text-[10px] uppercase text-slate-500 text-center tracking-widest">Propensity</TableHead>
-                                            <TableHead className="text-right font-bold text-[10px] uppercase pr-8 text-slate-500 tracking-widest">Diagnostic</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {processedResults.length === 0 ? (
-                                            <TableRow className="hover:bg-transparent border-none">
-                                                <TableCell colSpan={3} className="h-[500px] text-center">
-                                                    <div className="flex flex-col items-center justify-center space-y-4 opacity-30">
-                                                        <div className="p-6 bg-slate-950/20 rounded-full border border-slate-800">
-                                                            <Database className="w-12 h-12 text-slate-600" />
-                                                        </div>
-                                                        <p className="text-sm font-medium text-slate-500 italic">No batch data processed</p>
-                                                    </div>
-                                                </TableCell>
+                                {results.length > 0 && (
+                                    <div className="flex bg-muted/40 p-1 rounded-xl border border-border">
+                                        {['all', 'hot', 'warm'].map((f) => (
+                                            <button 
+                                                key={f} 
+                                                onClick={() => setFilter(f)}
+                                                className={`px-6 py-2 text-[10px] font-black uppercase rounded-lg transition-all ${filter === f ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                                            >
+                                                {f}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </CardHeader>
+                            <CardContent className="p-0 flex-1">
+                                <div className="max-h-[800px] overflow-auto">
+                                    <Table>
+                                        <TableHeader className="bg-muted/50 sticky top-0 z-10 backdrop-blur-md">
+                                            <TableRow className="border-border">
+                                                <TableHead className="font-black text-[10px] uppercase py-5 pl-8 text-muted-foreground tracking-widest">Subject Profile</TableHead>
+                                                <TableHead className="font-black text-[10px] uppercase text-center text-muted-foreground tracking-widest">Propensity</TableHead>
+                                                <TableHead className="text-right font-black text-[10px] uppercase pr-8 text-muted-foreground tracking-widest">Diagnostic</TableHead>
                                             </TableRow>
-                                        ) : (
-                                            processedResults.map((row, i) => (
-                                                <TableRow key={i} className="hover:bg-slate-800/20 border-slate-800/40 transition-colors group">
-                                                    <TableCell className="py-5 pl-8">
-                                                        <div className="font-bold text-slate-100 capitalize text-sm">{row.job}</div>
-                                                        <div className="text-[10px] font-medium text-slate-500 mt-1 uppercase flex items-center gap-3">
-                                                            <span>Age {row.age}</span>
-                                                            <span className="w-1 h-1 bg-slate-800 rounded-full" />
-                                                            <span className="text-blue-500 font-bold">{row.balance.toLocaleString()}</span>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {processedResults.length === 0 ? (
+                                                <TableRow>
+                                                    <TableCell colSpan={3} className="h-[400px] text-center">
+                                                        <div className="flex flex-col items-center justify-center space-y-4 opacity-30">
+                                                            <Database className="w-16 h-16 text-muted-foreground" />
+                                                            <p className="text-[10px] font-black uppercase tracking-widest">Awaiting Batch Input</p>
                                                         </div>
                                                     </TableCell>
-                                                    <TableCell>
-                                                        <div className="flex flex-col items-center gap-2">
-                                                            <div className="flex items-center gap-3">
-                                                                <span className="font-mono font-black text-sm text-white">{(row.score * 100).toFixed(0)}%</span>
-                                                                <div className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-tighter ${
-                                                                    row.status === "Hot" ? "bg-rose-500/10 text-rose-500 border border-rose-500/20" : 
-                                                                    row.status === "Warm" ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" : 
-                                                                    "bg-blue-500/10 text-blue-500 border border-blue-500/20"
-                                                                }`}>
-                                                                    {row.status}
+                                                </TableRow>
+                                            ) : (
+                                                processedResults.map((row, i) => (
+                                                    <TableRow key={i} className="hover:bg-muted/20 border-border group transition-colors">
+                                                        <TableCell className="py-6 pl-8">
+                                                            <div className="font-black text-foreground uppercase text-sm tracking-tight">{row.job}</div>
+                                                            <div className="text-[10px] font-bold text-muted-foreground mt-1 uppercase flex items-center gap-2">
+                                                                <Badge variant="outline" className="text-[9px] py-0">{row.age}Y</Badge>
+                                                                <span className="text-emerald-600 font-black">${row.balance.toLocaleString()}</span>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <div className="flex flex-col items-center gap-2">
+                                                                <div className="flex items-center gap-3">
+                                                                    <span className="font-black text-sm text-foreground">{(row.score * 100).toFixed(0)}%</span>
+                                                                    <Badge className={`text-[9px] font-black uppercase tracking-tighter ${
+                                                                        row.status?.toLowerCase() === "hot" ? "bg-emerald-500 hover:bg-emerald-500" : 
+                                                                        row.status?.toLowerCase() === "warm" ? "bg-amber-500 hover:bg-amber-500" : "bg-primary"
+                                                                    }`}>
+                                                                        {row.status}
+                                                                    </Badge>
+                                                                </div>
+                                                                <div className="w-24 h-1.5 bg-muted rounded-full overflow-hidden border border-border">
+                                                                    <div 
+                                                                        className={`h-full ${row.score > 0.7 ? 'bg-emerald-500' : 'bg-primary'}`} 
+                                                                        style={{ width: `${row.score * 100}%` }} 
+                                                                    />
                                                                 </div>
                                                             </div>
-                                                            <div className="w-24 h-1 bg-slate-950/50 rounded-full overflow-hidden border border-slate-800">
-                                                                <div 
-                                                                    className={`h-full ${row.score > 0.7 ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.4)]' : 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.4)]'}`} 
-                                                                    style={{ width: `${row.score * 100}%` }} 
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell className="text-right pr-8">
-                                                        <Dialog>
-                                                            <DialogTrigger asChild>
-                                                                <Button variant="ghost" size="icon" className="hover:bg-blue-500/10 hover:text-blue-400 text-slate-600 rounded-full">
-                                                                    <Eye className="w-4 h-4" />
-                                                                </Button>
-                                                            </DialogTrigger>
-                                                            <DialogContent className="max-w-md border-slate-800 bg-slate-900 shadow-3xl text-slate-300">
-                                                                <DialogHeader>
-                                                                    <DialogTitle className="text-xl font-bold text-white flex items-center gap-2">
-                                                                        <CheckCircle2 className="w-5 h-5 text-blue-500" />
-                                                                        Lead Insight
-                                                                    </DialogTitle>
-                                                                    <DialogDescription className="text-slate-500">AI reasoning for propensity score</DialogDescription>
-                                                                </DialogHeader>
-                                                                <div className="space-y-6 mt-6">
-                                                                    <div className="grid grid-cols-2 gap-4">
-                                                                        <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800">
-                                                                            <p className="text-[10px] font-bold text-slate-600 uppercase mb-1">Education</p>
-                                                                            <p className="text-sm font-bold capitalize text-slate-200">{row.education}</p>
+                                                        </TableCell>
+                                                        <TableCell className="text-right pr-8">
+                                                            <Dialog>
+                                                                <DialogTrigger asChild>
+                                                                    <Button variant="outline" size="sm" className="font-black text-[10px] uppercase h-9 rounded-xl border-border hover:bg-primary hover:text-primary-foreground">
+                                                                        <Eye className="w-3.5 h-3.5 mr-2" /> Inspect
+                                                                    </Button>
+                                                                </DialogTrigger>
+                                                                <DialogContent className="max-w-md border-border bg-card font-mono">
+                                                                    <DialogHeader>
+                                                                        <DialogTitle className="text-xl font-black uppercase tracking-tighter flex items-center gap-2">
+                                                                            <Activity className="w-5 h-5 text-primary" /> Lead Insight
+                                                                        </DialogTitle>
+                                                                    </DialogHeader>
+                                                                    <div className="space-y-6 mt-4">
+                                                                        <div className="grid grid-cols-2 gap-4">
+                                                                            <div className="p-4 bg-muted/30 rounded-2xl border border-border">
+                                                                                <p className="text-[10px] font-black text-muted-foreground uppercase mb-1">Education</p>
+                                                                                <p className="text-sm font-black uppercase text-foreground">{row.education}</p>
+                                                                            </div>
+                                                                            <div className="p-4 bg-muted/30 rounded-2xl border border-border">
+                                                                                <p className="text-[10px] font-black text-muted-foreground uppercase mb-1">Engagement</p>
+                                                                                <p className="text-sm font-black text-foreground">{row.duration}s</p>
+                                                                            </div>
                                                                         </div>
-                                                                        <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800">
-                                                                            <p className="text-[10px] font-bold text-slate-600 uppercase mb-1">Engagement</p>
-                                                                            <p className="text-sm font-bold text-slate-200">{row.duration}s</p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="p-5 bg-blue-500/5 border border-blue-500/10 rounded-2xl relative overflow-hidden">
-                                                                        <div className="relative z-10">
-                                                                            <p className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-3 italic">Scoring Logic</p>
-                                                                            <p className="text-sm text-slate-300 leading-relaxed">
-                                                                                Target alignment confirmed with <strong className="text-white">{(row.score * 100).toFixed(1)}%</strong> confidence. 
-                                                                                Primary conversion drivers identified as {row.duration > 180 ? 'prolonged engagement' : 'liquidity profile'} and demographic relevance.
+                                                                        <div className="p-5 bg-primary/5 border-2 border-primary/10 rounded-2xl">
+                                                                            <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-3 italic">Neural Reasoning</p>
+                                                                            <p className="text-sm text-foreground/80 leading-relaxed font-medium">
+                                                                                Lead shows <strong className="text-foreground">{(row.score * 100).toFixed(1)}%</strong> conversion probability based on demographic clustering and behavioral duration metrics.
                                                                             </p>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </DialogContent>
-                                                        </Dialog>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </CardContent>
-                    </Card>
+                                                                </DialogContent>
+                                                            </Dialog>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </div>

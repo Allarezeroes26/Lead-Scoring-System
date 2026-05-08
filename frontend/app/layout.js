@@ -22,31 +22,40 @@ const ebGaramond = EB_Garamond({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${dmMono.variable} ${ebGaramond.variable}`} suppressHydrationWarning>
-      <body className="antialiased h-screen font-mono bg-[#020617] text-slate-200">
+      <body className="antialiased h-screen font-mono bg-background text-foreground transition-colors duration-300">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark" // Forced dark for that "Command Center" feel
-          enableSystem={false}
+          defaultTheme="dark" 
+          enableSystem={true} 
           disableTransitionOnChange
         >
           <TooltipProvider delayDuration={0}>
             <SidebarProvider>
-              <div className="flex h-full w-full overflow-hidden bg-[#020617]">
+              {/* Outer Wrapper */}
+              <div className="flex h-full w-full overflow-hidden bg-background">
                 <AppSidebar />
-                <main className="flex-1 flex flex-col min-w-0 bg-[#020617] relative">
-                  {/* Subtle radial glow for depth */}
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#1e293b,transparent)] pointer-events-none" />
+                
+                <main className="flex-1 flex flex-col min-w-0 bg-background relative">
                   
-                  <header className="flex h-14 items-center border-b border-slate-800/60 px-4 shrink-0 bg-slate-900/50 backdrop-blur-md z-10">
-                    <SidebarTrigger className="text-slate-400 hover:text-white transition-colors" />
+                  {/* Subtle Background Glow */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,var(--color-muted),transparent)] dark:bg-[radial-gradient(circle_at_50%_-20%,var(--color-primary),transparent)] opacity-40 pointer-events-none" />
+                  
+                  {/* Header */}
+                  <header className="flex h-14 items-center border-b border-border px-4 shrink-0 bg-background/80 backdrop-blur-md z-10">
+                    <SidebarTrigger className="text-muted-foreground hover:text-foreground transition-colors" />
+                    
                     <div className="ml-4 flex items-center gap-2">
-                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">System Status:</span>
+                       <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                         System Status:
+                       </span>
                        <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                       <span className="text-[10px] font-bold text-emerald-500 uppercase">Operational</span>
+                       <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">
+                         Operational
+                       </span>
                     </div>
                   </header>
 
-                  <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 relative z-0">
+                  <div className="flex-1 overflow-y-auto overflow-x-hidden bg-background p-4 md:p-8 relative z-0 min-w-0">
                     <div className="max-w-[1600px] mx-auto">
                       {children}
                     </div>
