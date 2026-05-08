@@ -182,7 +182,7 @@ const AboutPage = () => {
                                     <a href="https://github.com/Allarezeroes26" target="_blank" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
                                         <FaGithub className="w-4 h-4" />
                                     </a>
-                                    <a href="www.linkedin.com/in/john-erwin-bacani-90853a359" target="_blank" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
+                                    <a href="https://www.linkedin.com/in/john-erwin-bacani-90853a359" target="_blank" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
                                         <FaLinkedin className="w-4 h-4" />
                                     </a>
                                     <a href="https://portfolio-j0qq.onrender.com/" target="_blank" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
