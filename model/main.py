@@ -19,8 +19,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="ML Prediction Service", lifespan=lifespan)
 
-# Security: Pull the frontend URL from environment variables
-# On Render, you will set ALLOWED_ORIGINS to https://your-frontend.com
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 
 app.add_middleware(
