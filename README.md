@@ -303,6 +303,6 @@ This project is intended for:
 
 **Erwin Bacani**
 
-GitHub: https://github.com/Allarezeroes26
-LinkedIn: www.linkedin.com/in/john-erwin-bacani-90853a359
+GitHub: https://github.com/Allarezeroes26  
+LinkedIn: www.linkedin.com/in/john-erwin-bacani-90853a359  
 Portfolio: https://portfolio-j0qq.onrender.com/
