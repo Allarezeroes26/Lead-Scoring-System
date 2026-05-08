@@ -84,10 +84,10 @@ const SettingsPage = () => {
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-2">
                     <h1 className="text-4xl font-black tracking-tight flex items-center gap-3">
-                        <Settings2 className="w-9 h-9 text-primary" /> System Config
+                        <Settings2 className="w-9 h-9 text-primary" /> Model Settings
                     </h1>
                     <p className="text-muted-foreground font-medium">
-                        Calibrate LogitEngine weights and interface preferences.
+                        Configure model behavior and interface settings.
                     </p>
                 </div>
 
@@ -115,14 +115,14 @@ const SettingsPage = () => {
                     <CardHeader className="border-b border-border bg-muted/20">
                         <div className="flex items-center gap-2">
                             <Sliders className="w-4 h-4 text-primary" />
-                            <CardTitle>Inference Calibration</CardTitle>
+                            <CardTitle>Prediction Threshold</CardTitle>
                         </div>
-                        <CardDescription className="text-muted-foreground">Adjust classification cutoffs.</CardDescription>
+                        <CardDescription className="text-muted-foreground">Adjust the probability threshold used for lead classification.</CardDescription>
                     </CardHeader>
                     <CardContent className="p-8 space-y-8">
                         <div className="space-y-6">
                             <div className="flex justify-between items-center">
-                                <Label className="font-bold text-foreground text-sm tracking-wide">Sensitivity Threshold</Label>
+                                <Label className="font-bold text-foreground text-sm tracking-wide">Decision Threshold</Label>
                                 <span className="font-mono text-primary font-bold bg-primary/10 border border-primary/20 px-3 py-1 rounded-lg text-lg">
                                     {threshold.toFixed(2)}
                                 </span>
@@ -136,7 +136,7 @@ const SettingsPage = () => {
                             />
                             <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
                                 <p className="text-xs text-muted-foreground leading-relaxed">
-                                    <span className="font-bold text-foreground">Logic:</span> Vectors with a sigmoid output &ge; {threshold.toFixed(2)} are flagged as 
+                                    <span className="font-bold text-foreground">Logic:</span> Leads with probabilities above &ge; {threshold.toFixed(2)} are classified as  
                                     <span className="text-emerald-500 font-bold ml-1">High Intent</span>.
                                 </p>
                             </div>
@@ -144,36 +144,13 @@ const SettingsPage = () => {
                     </CardContent>
                 </Card>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="bg-card border-border">
-                        <CardHeader className="py-4">
-                            <CardTitle className="text-sm text-muted-foreground flex items-center gap-2 font-medium">
-                                <Beaker className="w-4 h-4 text-emerald-500" /> Learning Rate
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-mono font-bold text-foreground">0.0015 &alpha;</div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-card border-border">
-                        <CardHeader className="py-4">
-                            <CardTitle className="text-sm text-muted-foreground flex items-center gap-2 font-medium">
-                                <Database className="w-4 h-4 text-indigo-500" /> Vector Source
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-sm font-mono text-muted-foreground truncate">fastapi_bridge_v1.2/prod</div>
-                        </CardContent>
-                    </Card>
-                </div>
-
                 <div className="group p-6 border border-destructive/20 bg-destructive/5 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-4 transition-all hover:bg-destructive/10">
                     <div className="flex items-center gap-4">
                         <div className="p-3 bg-destructive/10 rounded-2xl text-destructive border border-destructive/20">
                             <ShieldAlert className="w-6 h-6" />
                         </div>
                         <div>
-                            <h4 className="font-bold text-destructive">Hard Engine Reset</h4>
+                            <h4 className="font-bold text-destructive">Restore Default Weights</h4>
                             <p className="text-xs text-muted-foreground">Reload weight vectors from disk default (.npy).</p>
                         </div>
                     </div>
@@ -183,7 +160,7 @@ const SettingsPage = () => {
                         onClick={handleReset}
                         className="border-destructive/30 text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-xl px-6 transition-all"
                     >
-                        {resetting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Reset Vectors"}
+                        {resetting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : "Restore Defaults"}
                     </Button>
                 </div>
             </div>
@@ -202,7 +179,7 @@ const SettingsPage = () => {
                     className="bg-primary hover:opacity-90 text-primary-foreground rounded-xl px-12 font-bold shadow-lg active:scale-95 transition-all"
                 >
                     {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
-                    Sync Engine
+                    Save Settings
                 </Button>
             </footer>
         </div>

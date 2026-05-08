@@ -71,8 +71,8 @@ export default function Home() {
               <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_#3b82f6]" />
               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 dark:text-blue-500">Core Dashboard // Scorer_V1</span>
             </div>
-            <h1 className="text-5xl font-black tracking-tighter text-foreground">Lead Intelligence</h1>
-            <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest">Aggregated Predictive Telemetry</p>
+            <h1 className="text-5xl font-black tracking-tighter text-foreground">Inference Dashboard</h1>
+            <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest">Real-Time Scoring Telemetry</p>
           </div>
           <div className="flex items-center gap-4">
             

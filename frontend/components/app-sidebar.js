@@ -13,13 +13,15 @@ import {
   SidebarMenuItem, SidebarRail, SidebarFooter,
 } from "./ui/sidebar"
 
+import Image from "next/image"
+
 const data = {
   navMain: [
     { title: "Home", url: "/", icon: Home },
     { title: "Lead Predictor", url: "/scorer", icon: Activity },
     { title: "Batch Predictor", url: "/batch_scorer", icon: Package },
-    { title: "Model Details", url: "/about", icon: Info },
-    { title: "Weights", url: "/weight", icon: Weight },
+    { title: "Model Overview", url: "/about", icon: Info },
+    { title: "Feature Importance", url: "/weight", icon: Weight },
     { title: "Settings", url: "/settings", icon: Settings },
   ],
 }
@@ -36,8 +38,8 @@ export function AppSidebar() {
             <Terminal className="size-5" />
           </div>
           <div className="flex flex-col gap-0.5 leading-none group-data-[collapsible=icon]:hidden">
-            <span className="font-black tracking-tight text-foreground uppercase text-[11px]">Customer_Predictor</span>
-            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono font-bold tracking-tighter">v1.0.0_STABLE</span>
+            <span className="font-black tracking-tight text-foreground uppercase text-[11px]">scoring_engine</span>
+            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-mono font-bold tracking-tighter">v1.0.0</span>
           </div>
         </div>
       </SidebarHeader>
@@ -45,7 +47,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground group-data-[collapsible=icon]:hidden">
-            Inference Control
+            Workspace
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="px-2 gap-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
@@ -84,12 +86,19 @@ export function AppSidebar() {
       <SidebarFooter className="p-4 border-t border-border group-data-[collapsible=icon]:p-2">
         <div className="flex items-center gap-3 px-3 py-2 bg-muted/50 rounded-xl border border-border backdrop-blur-sm group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:border-none group-data-[collapsible=icon]:justify-center">
           <div className="relative shrink-0">
-            <UserCircle className="size-6 text-muted-foreground" />
-            <div className="absolute bottom-0 right-0 size-2 bg-emerald-500 rounded-full border-2 border-background" />
+            <Image
+              src="/me.jpg"
+              alt="Erwin Bacani"
+              width={40}
+              height={40}
+              className="rounded-full object-cover border border-border"
+            />
+
+            <div className="absolute bottom-0 right-0 size-2.5 bg-emerald-500 rounded-full border-2 border-background" />
           </div>
           <div className="flex flex-col min-w-0 group-data-[collapsible=icon]:hidden">
             <span className="text-xs font-bold text-foreground truncate">Erwin Bacani</span>
-            <span className="text-[9px] text-blue-600 dark:text-blue-500 font-mono font-bold uppercase tracking-tighter">System_Admin</span>
+            <span className="text-[9px] text-blue-600 dark:text-blue-500 font-mono font-bold uppercase tracking-tighter">Developer</span>
           </div>
         </div>
       </SidebarFooter>

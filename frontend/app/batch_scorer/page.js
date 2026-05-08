@@ -171,7 +171,7 @@ export default function BatchPage() {
                         </div>
                         <h1 className="text-5xl font-black tracking-tighter text-foreground">Intelligence Batch</h1>
                         <p className="text-muted-foreground text-sm max-w-2xl leading-relaxed font-medium">
-                            High-volume propellant scoring. Upload CSV datasets for multi-threaded neural inference.
+                            High-volume lead scoring pipeline. Upload CSV datasets for batch prediction using a logistic regression model.
                         </p>
                     </div>
                 </header>
@@ -184,7 +184,7 @@ export default function BatchPage() {
                             <div className="h-1 w-full bg-gradient-to-r from-primary to-transparent opacity-80" />
                             <CardHeader className="pb-4">
                                 <div className="flex items-center justify-between">
-                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Engine Configuration</CardTitle>
+                                    <CardTitle className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Batch Configuration</CardTitle>
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary"><Info className="w-4 h-4" /></Button>
@@ -192,7 +192,7 @@ export default function BatchPage() {
                                         <DialogContent className="bg-card border-border font-mono">
                                             <DialogHeader>
                                                 <DialogTitle className="text-foreground uppercase font-black">Data Requirements</DialogTitle>
-                                                <DialogDescription className="text-muted-foreground">The engine expects standard lead features (Age, Balance, Duration, etc.)</DialogDescription>
+                                                <DialogDescription className="text-muted-foreground">The model expects structured lead features such as age, balance, duration, engagement history, etc.</DialogDescription>
                                             </DialogHeader>
                                             <div className="space-y-4 py-4">
                                                 <Button onClick={downloadTemplate} className="w-full font-bold h-12" variant="outline">
@@ -222,7 +222,7 @@ export default function BatchPage() {
                                 <div className="relative border-2 border-dashed border-border rounded-2xl p-10 text-center hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer group">
                                     <input type="file" accept=".csv" onChange={handleFileUpload} className="absolute inset-0 opacity-0 z-10 cursor-pointer" />
                                     <Upload className="w-12 h-12 mx-auto text-muted-foreground group-hover:text-primary mb-4 transition-transform group-hover:-translate-y-1" />
-                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter">{fileName || "Inject Dataset (.csv)"}</p>
+                                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter">{fileName || "Upload CSV Dataset (.csv)"}</p>
                                 </div>
 
                                 {/* RESTORED CSV PREVIEW */}
@@ -230,7 +230,7 @@ export default function BatchPage() {
                                     <div className="p-4 bg-muted/30 rounded-2xl border-2 border-border animate-in fade-in slide-in-from-bottom-2">
                                         <div className="flex items-center gap-2 mb-3">
                                             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                                            <p className="text-[10px] font-black text-primary uppercase tracking-widest">Validation Preview</p>
+                                            <p className="text-[10px] font-black text-primary uppercase tracking-widest">Data Preview</p>
                                         </div>
                                         <div className="space-y-2">
                                             {rawData.slice(0, 3).map((row, i) => (
@@ -266,7 +266,7 @@ export default function BatchPage() {
                                             className="w-full h-16 font-black bg-primary text-primary-foreground hover:opacity-90 rounded-2xl shadow-xl text-lg" 
                                             disabled={loading}
                                         >
-                                            {loading ? <><Loader2 className="animate-spin mr-3 w-6 h-6" /> PROCESSING</> : "EXECUTE BATCH"}
+                                            {loading ? <><Loader2 className="animate-spin mr-3 w-6 h-6" /> Running Predictions</> : "PROCESS BATCH"}
                                         </Button>
                                     </div>
                                 )}
@@ -277,7 +277,7 @@ export default function BatchPage() {
                             <Card className="border-border bg-card shadow-xl overflow-hidden relative group">
                                 <div className="h-1 w-full bg-gradient-to-r from-emerald-500 to-transparent" />
                                 <CardContent className="pt-8">
-                                    <p className="text-[10px] text-muted-foreground uppercase font-black tracking-[0.2em] mb-6">Distribution Matrix</p>
+                                    <p className="text-[10px] text-muted-foreground uppercase font-black tracking-[0.2em] mb-6">Prediction Distribution</p>
                                     <div className="grid grid-cols-3 gap-3">
                                         <div className="bg-muted/30 p-4 rounded-xl border border-border">
                                             <p className="text-[9px] text-emerald-500 font-black mb-1 uppercase tracking-tighter">High</p>

@@ -105,17 +105,17 @@ const PredictPage = () => {
                     <div className="space-y-3">
                         <div className="flex items-center gap-2 text-primary">
                             <Activity className="w-5 h-5" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Neural Inference Module</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Prediction Engine</span>
                         </div>
                         <h1 className="text-5xl font-black tracking-tighter">Lead Predictor</h1>
                         <p className="text-muted-foreground text-sm max-w-2xl leading-relaxed font-medium">
-                            Real-time behavioral analysis. Enter customer metadata below to calculate conversion probability.
+                            Real-time behavioral scoring engine. Input customer attributes to compute conversion probability.
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="bg-card border border-border rounded-xl p-1 flex items-center shadow-sm">
-                             <div className="px-4 py-2 text-[10px] font-black text-muted-foreground uppercase border-r border-border">System Ready</div>
-                             <div className="px-4 py-2 font-mono text-primary font-bold">STABLE_V1</div>
+                             <div className="px-4 py-2 text-[10px] font-black text-muted-foreground uppercase border-r border-border">Model Online</div>
+                             <div className="px-4 py-2 font-mono text-primary font-bold">V1</div>
                         </div>
                         <Button 
                             variant="outline" 

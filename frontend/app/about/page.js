@@ -8,7 +8,8 @@ import {
     BrainCircuit, CheckCircle2, 
     ArrowRight, Microscope, Activity,
     Target, BarChart3, AlertTriangle, Scale,
-    Fingerprint, Terminal
+    Fingerprint, Terminal,
+    Globe
 } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
@@ -29,10 +30,10 @@ const AboutPage = () => {
                         Customer Conversion <span className="text-primary">Prediction System</span>
                     </h1>
                     <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium">
-                        A fullstack machine learning system that predicts customer conversion using an interpretable logistic regression model built from scratch.
+                        A fullstack machine learning system that estimates customer conversion likelihood using an interpretable logistic regression model built from scratch.
                     </p>
                     <p className="text-lg italic text-muted-foreground/60 max-w-2xl mx-auto font-medium">
-                        "Built without scikit-learn — every prediction, weight update, and sigmoid function is implemented manually using NumPy."
+                        "No scikit-learn used — all predictions, gradient updates, and the sigmoid function are implemented manually with NumPy."
                     </p>
                 </div>
             </section>
@@ -50,17 +51,17 @@ const AboutPage = () => {
                                     <Microscope className="w-4 h-4" /> Model Overview
                                 </h2>
                                 <div className="text-muted-foreground space-y-4 text-sm leading-relaxed border-l-2 border-border pl-6">
-                                    <p>This system replaces "black-box" approaches with an <strong>interpretable Logistic Regression model</strong>. By analyzing historical engagement, the system calculates a weighted probability of conversion.</p>
-                                    <p>The core logic was implemented manually using <strong>NumPy</strong> to handle matrix multiplications and gradient updates without high-level abstractions.</p>
+                                    <p>This project replaces black-box approaches with an <strong>logistic regression model</strong>. It analyzes historical user engagement to compute a weighted likelihood of conversion.</p>
+                                    <p>The core logic is implemented directly in <strong>NumPy</strong>, including matrix operations and gradient updates, without relying on high-level ML libraries.</p>
                                 </div>
                             </div>
                             <div className="space-y-6">
                                 <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-destructive flex items-center gap-2">
                                     <Target className="w-4 h-4" /> Model Objective
                                 </h2>
-                                <p className="text-muted-foreground text-sm leading-relaxed mb-4">The primary goal is to provide transparency in lead scoring by visualizing exactly which variables move the needle.</p>
+                                <p className="text-muted-foreground text-sm leading-relaxed mb-4">The goal is to make lead scoring transparent by clearly showing which features influence the final prediction.</p>
                                 <ul className="space-y-4">
-                                    {["Rank leads by probability", "Optimize outreach resources", "Audit model coefficients", "Explainable predictions"].map((item, i) => (
+                                    {["Rank leads by conversion likelihood", "Improve outreach efficiency", "Audit feature influence"].map((item, i) => (
                                         <li key={i} className="flex items-center gap-3 text-xs font-bold text-foreground group">
                                             <div className="p-1 bg-emerald-500/10 rounded border border-emerald-500/20">
                                                 <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-500" />
@@ -76,7 +77,7 @@ const AboutPage = () => {
                         <section className="space-y-10">
                             <div className="space-y-2 text-center">
                                 <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground italic">Model Pipeline</h3>
-                                <p className="text-muted-foreground/60 text-[10px] uppercase tracking-widest">Data Input → Statistical Inference → Probability Output</p>
+                                <p className="text-muted-foreground/60 text-[10px] uppercase tracking-widest">Data Input → Feature Processing → Probability Estimation</p>
                             </div>
                             
                             <div className="p-2 border border-border rounded-[2.5rem] bg-card shadow-xl dark:shadow-none">
@@ -116,15 +117,15 @@ const AboutPage = () => {
                                     <BrainCircuit className="w-8 h-8 text-primary" /> Logistic Regression Mechanics
                                 </h2>
                                 <p className="text-muted-foreground text-sm leading-relaxed max-w-xl">
-                                    Prediction confidence is calculated by measuring how far probabilities are from the uncertainty boundary of 0.5.
+                                    Prediction confidence is derived from how far outputs are from the decision boundary at 0.5.
                                 </p>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {[
-                                    { val: "0.50", label: "Boundary Uncertainty" },
-                                    { val: "0.95", label: "Strong Positive Sign" },
-                                    { val: "0.02", label: "Strong Negative Sign" }
+                                    { val: "0.50", label: "Decision Boundary" },
+                                    { val: "0.95", label: "Strong Positive Prediction" },
+                                    { val: "0.02", label: "Strong Negative Prediction" }
                                 ].map((ex, i) => (
                                     <div key={i} className="bg-muted/20 p-6 rounded-3xl border border-border text-center group hover:border-primary transition-all shadow-sm">
                                         <p className="text-[9px] font-black text-muted-foreground group-hover:text-primary uppercase mb-2 tracking-[0.2em] transition-colors">{ex.label}</p>
@@ -142,9 +143,9 @@ const AboutPage = () => {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 {[
-                                    { title: "Imbalance Sensitivity", icon: <Scale className="w-4 h-4 text-destructive" />, desc: "Sensitive to imbalanced datasets; requires tuning over raw accuracy." },
-                                    { title: "Linear Boundary", icon: <BarChart3 className="w-4 h-4 text-destructive" />, desc: "Limited to linear decision boundaries; unable to model non-linear interactions." },
-                                    { title: "Feature Scaling", icon: <Activity className="w-4 h-4 text-destructive" />, desc: "Requires normalization/standardization for gradient descent stability." }
+                                    { title: "Imbalance Sensitivity", icon: <Scale className="w-4 h-4 text-destructive" />, desc: "Sensitive to class imbalance and requires careful metric selection beyond raw accuracy." },
+                                    { title: "Linear Boundary", icon: <BarChart3 className="w-4 h-4 text-destructive" />, desc: "Only models linear relationships and cannot capture complex non-linear interactions." },
+                                    { title: "Feature Scaling", icon: <Activity className="w-4 h-4 text-destructive" />, desc: "Requires feature scaling to ensure stable and efficient gradient descent." }
                                 ].map((limit, i) => (
                                     <div key={i} className="space-y-4 group">
                                         <div className="flex items-center gap-3">
@@ -174,15 +175,18 @@ const AboutPage = () => {
                                 <div className="space-y-4">
                                     <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">Project Goal</p>
                                     <p className="text-xs text-muted-foreground leading-relaxed font-medium italic border-l-4 border-primary/20 pl-4 bg-muted/10 py-4 rounded-r-xl">
-                                        "This project was built to strengthen my understanding of machine learning fundamentals, statistical prediction systems, and fullstack architecture."
+                                        "This project was built to deepen my understanding of machine learning fundamentals, statistical modeling, and fullstack system design."
                                     </p>
                                 </div>
                                 <div className="flex gap-3 pt-4">
-                                    <a href="#" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
+                                    <a href="https://github.com/Allarezeroes26" target="_blank" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
                                         <FaGithub className="w-4 h-4" />
                                     </a>
-                                    <a href="#" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
+                                    <a href="www.linkedin.com/in/john-erwin-bacani-90853a359" target="_blank" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
                                         <FaLinkedin className="w-4 h-4" />
+                                    </a>
+                                    <a href="https://portfolio-j0qq.onrender.com/" target="_blank" className="p-3 bg-background border border-border text-muted-foreground hover:text-primary shadow-sm transition-all rounded-xl">
+                                        <Globe className="w-4 h-4" />
                                     </a>
                                 </div>
                             </CardContent>
@@ -205,7 +209,7 @@ const AboutPage = () => {
                                 </div>
                                 <Separator className="bg-border" />
                                 <div>
-                                    <p className="text-[9px] font-black text-muted-foreground uppercase mb-4 tracking-widest">Backend & Math</p>
+                                    <p className="text-[9px] font-black text-muted-foreground uppercase mb-4 tracking-widest">Backend</p>
                                     <div className="flex flex-wrap gap-2">
                                         {['FastAPI', 'Python', 'NumPy', 'REST API'].map(t => (
                                             <Badge key={t} variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-[9px] px-2 py-0.5 rounded uppercase font-black">{t}</Badge>

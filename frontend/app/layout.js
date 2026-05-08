@@ -46,11 +46,11 @@ export default function RootLayout({ children }) {
                     
                     <div className="ml-4 flex items-center gap-2">
                        <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                         System Status:
+                         Model Status:
                        </span>
                        <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">
-                         Operational
+                         Working
                        </span>
                     </div>
                   </header>
