@@ -7,6 +7,32 @@ This system combines a custom-trained Logistic Regression model with a modern te
 
 ---
 
+# 🌐 Live Demo
+
+## Frontend Application
+https://lead-scoring-system-maio.onrender.com
+
+## Backend API
+https://lead-scoring-backend-peib.onrender.com
+
+---
+
+# 🔍 API Health Check
+
+```bash
+GET https://lead-scoring-backend-peib.onrender.com/health
+```
+
+Expected Response:
+
+```json
+{
+  "status": "healthy",
+  "model_loaded": true
+}
+```
+---
+
 # ✨ Features
 
 ## 📊 Intelligence Dashboard
