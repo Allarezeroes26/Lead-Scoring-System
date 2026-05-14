@@ -7,6 +7,115 @@ This system combines a custom-trained Logistic Regression model with a modern te
 
 ---
 
+# 🎬 Demo Showcase
+
+---
+
+## 📡 Intelligence Dashboard
+
+![Intelligence Dashboard](demo_gif/CRM_1.gif)
+
+The Intelligence Dashboard provides a real-time overview of model telemetry and conversion analytics.
+
+### Features Demonstrated
+
+- **Vectors Analyzed** — Displays the total number of processed lead vectors.
+- **Mean Propensity Score** — Calculates the average conversion probability across all analyzed leads.
+- **Priority Lead Detection** — Automatically identifies high-value leads based on scoring thresholds.
+- **Inference Confidence Monitoring** — Measures prediction certainty using variance distance from the neutral classification boundary.
+- **Distribution Matrix** — Visual breakdown of Low, Warm, and Hot lead categories.
+- **Inference Variance Table** — Displays statistical spread and confidence behavior across predictions.
+
+This module acts as the central operational intelligence hub for monitoring model behavior and lead quality in real time.
+
+---
+
+## 🧠 Manual Lead Predictor
+
+![Manual Lead Predictor](demo_gif/CRM_2.gif)
+
+The Manual Predictor allows users to input customer telemetry data and receive instant machine learning predictions.
+
+### Features Demonstrated
+
+- Structured lead input form for real-time scoring.
+- Instant probability calculation using the Logistic Regression inference engine.
+- Dynamic conversion probability output.
+- **Recall Functionality** — Users can instantly reload previous lead submissions without manually re-entering data.
+- **Prediction History System** — Stores recent inference sessions for rapid comparison and repeated evaluation workflows.
+
+This module focuses on fast interactive inference execution while improving usability through persistent prediction memory.
+
+---
+
+## ⚡ Intelligence Batch Processing
+
+![Batch Intelligence](demo_gif/CRM_3.gif)
+
+The Batch Intelligence module enables high-speed CSV-based inference processing for large customer datasets.
+
+### Features Demonstrated
+
+- CSV upload support for bulk lead analysis.
+- Simultaneous probability scoring for multiple customer records.
+- Lead segmentation filters:
+  - **All Leads**
+  - **Warm Leads**
+  - **Hot Leads**
+- Deep-dive analytical inspection for each prediction result.
+- Transparent explanation system showing why a lead received a high or low score based on feature influence.
+
+This module demonstrates scalable inference execution and explainable AI behavior for enterprise-style analytics workflows.
+
+---
+
+## 📊 Model Weight Visualization
+
+![Model Weight Visualization](demo_gif/CRM_4.gif)
+
+The Model Weights module exposes the internal mathematical behavior of the Logistic Regression model.
+
+### Features Demonstrated
+
+- Feature weight coefficient charts.
+- Positive and negative feature influence mapping.
+- Highest-impact feature detection.
+- Intercept bias visualization.
+
+The demo highlights that **call duration** produces the strongest positive influence on conversion probability, while the model bias represents the baseline prediction offset before feature contributions are applied.
+
+This transparency layer transforms the model from a black-box predictor into an explainable analytics system.
+
+---
+
+## ⚙️ System Settings & Threshold Control
+
+![System Settings](demo_gif/CRM_5.gif)
+
+The Settings module provides user-level customization and inference tuning capabilities.
+
+### Features Demonstrated
+
+- Dynamic dark mode theme switching.
+- Adjustable prediction threshold configuration.
+- Real-time threshold persistence for inference classification behavior.
+
+By modifying the prediction threshold, users can control how aggressively the system classifies leads as Low, Warm, or Hot priority.
+
+This module improves usability while allowing flexible operational calibration depending on business requirements.
+
+---
+
+# 🌐 Live Demo
+
+## Frontend Application
+https://lead-scoring-system-maio.onrender.com
+
+## Backend API
+https://lead-scoring-backend-peib.onrender.com
+
+---
+
 # 🔍 API Health Check
 
 ```bash
@@ -312,16 +421,6 @@ This project is intended for:
 - Machine learning experimentation
 - Portfolio presentation
 - Predictive analytics demonstrations
-
----
-
-# 🌐 Live Demo
-
-## Frontend Application
-https://lead-scoring-system-maio.onrender.com
-
-## Backend API
-https://lead-scoring-backend-peib.onrender.com
 
 ---
 
