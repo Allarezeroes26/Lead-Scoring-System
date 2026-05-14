@@ -121,7 +121,7 @@ Higher distance indicates stronger model certainty.
 ```bash
 lead-intelligence-system/
 │
-├── backend/
+├── model/
 │   ├── main.py
 │   ├── model_loader.py
 │   ├── schema.py
@@ -156,7 +156,7 @@ lead-intelligence-system/
 ## 1. Clone Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Allarezeroes26/Lead-Scoring-System
 cd lead-intelligence-system
 ```
 
