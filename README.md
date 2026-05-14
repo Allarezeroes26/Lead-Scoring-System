@@ -7,16 +7,6 @@ This system combines a custom-trained Logistic Regression model with a modern te
 
 ---
 
-# 🌐 Live Demo
-
-## Frontend Application
-https://lead-scoring-system-maio.onrender.com
-
-## Backend API
-https://lead-scoring-backend-peib.onrender.com
-
----
-
 # 🔍 API Health Check
 
 ```bash
@@ -322,6 +312,16 @@ This project is intended for:
 - Machine learning experimentation
 - Portfolio presentation
 - Predictive analytics demonstrations
+
+---
+
+# 🌐 Live Demo
+
+## Frontend Application
+https://lead-scoring-system-maio.onrender.com
+
+## Backend API
+https://lead-scoring-backend-peib.onrender.com
 
 ---
 
