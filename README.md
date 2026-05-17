@@ -112,14 +112,14 @@ This module improves usability while allowing flexible operational calibration d
 https://lead-scoring-system-maio.onrender.com
 
 ## Backend API
-https://lead-scoring-backend-peib.onrender.com
+https://lead-scoring-system-backend.onrender.com
 
 ---
 
 # 🔍 API Health Check
 
 ```bash
-GET https://lead-scoring-backend-peib.onrender.com/health
+GET https://lead-scoring-system-backend.onrender.com/health
 ```
 
 Expected Response:
