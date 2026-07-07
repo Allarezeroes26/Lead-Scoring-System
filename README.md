@@ -9,6 +9,12 @@ This system combines a custom-trained Logistic Regression model with a modern te
 
 # 🎬 Demo Showcase
 
+## Frontend Application
+https://lead-scoring-system-maio.onrender.com
+
+## Backend API
+https://lead-scoring-system-backend.onrender.com
+
 ---
 
 ## 📡 Intelligence Dashboard
@@ -103,16 +109,6 @@ The Settings module provides user-level customization and inference tuning capab
 By modifying the prediction threshold, users can control how aggressively the system classifies leads as Low, Warm, or Hot priority.
 
 This module improves usability while allowing flexible operational calibration depending on business requirements.
-
----
-
-# 🌐 Live Demo
-
-## Frontend Application
-https://lead-scoring-system-maio.onrender.com
-
-## Backend API
-https://lead-scoring-system-backend.onrender.com
 
 ---
 
